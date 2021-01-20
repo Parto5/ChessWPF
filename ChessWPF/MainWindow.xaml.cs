@@ -85,7 +85,7 @@ namespace ChessWPF
 
                 //w wypadku pustego pola pozbycie się tekstu
                 if (button.Content.Equals(SquareType.Free))
-                    button.Content = string.Empty;
+                    button.Content = "";
             });
 
 
@@ -100,26 +100,29 @@ namespace ChessWPF
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-
-            if(lastClickedButton.Equals(""))
-            {
-                lastClickedButton = button.Name;
-                button.Background = Brushes.Cyan;
-            }
-            else
-            {
-                var lastButton = (Button)FindName(lastClickedButton);
-                if ((Grid.GetColumn(lastButton) + Grid.GetRow(lastButton)) % 2 == 1)
-                    lastButton.Background = Brushes.SeaGreen;
+            //if (!button.Content.Equals("") || lastClickedButton.Equals(""))
+            //{ 
+                if(lastClickedButton.Equals(""))
+                {
+                    lastClickedButton = button.Name;
+                    button.Background = Brushes.Cyan;
+                }
                 else
-                    lastButton.Background = Brushes.White;
+                {
+                    var lastButton = (Button)FindName(lastClickedButton);
+                    if ((Grid.GetColumn(lastButton) + Grid.GetRow(lastButton)) % 2 == 1)
+                        lastButton.Background = Brushes.SeaGreen;
+                    else
+                        lastButton.Background = Brushes.White;
 
 
-                var tmp = lastButton.Content;
-                lastButton.Content = button.Content;
-                button.Content = tmp;
-                lastClickedButton = "";
-            }
+                    var tmp = lastButton.Content;
+                    lastButton.Content = button.Content;
+                    button.Content = tmp;
+                    lastClickedButton = "";
+
+                }
+            //}
         }
     }
 }
