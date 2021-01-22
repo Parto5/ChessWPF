@@ -97,32 +97,80 @@ namespace ChessWPF
             }); */
         }
 
+        //obsługa przycisków
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
+            MessageBox.Show("Kliknąłeś przycisk: " + button.Name + " o zawartości " + button.Content);
             //if (!button.Content.Equals("") || lastClickedButton.Equals(""))
             //{ 
-                if(lastClickedButton.Equals(""))
+            
+            if (lastClickedButton.Equals(""))
                 {
-                    lastClickedButton = button.Name;
-                    button.Background = Brushes.Cyan;
+                    //sprawdź czy klika swój pionek
+                    if(checkIfCanBeClicked(button, whiteTurn)) 
+                    {
+                        lastClickedButton = button.Name;
+                        button.Background = Brushes.Cyan;
+                    }
                 }
                 else
                 {
+                    //odznacz pierwsze pole
                     var lastButton = (Button)FindName(lastClickedButton);
                     if ((Grid.GetColumn(lastButton) + Grid.GetRow(lastButton)) % 2 == 1)
                         lastButton.Background = Brushes.SeaGreen;
                     else
                         lastButton.Background = Brushes.White;
 
-
-                    var tmp = lastButton.Content;
-                    lastButton.Content = button.Content;
-                    button.Content = tmp;
+                    if (canIMoveHere(button, lastButton, whiteTurn))
+                    {
+                        var tmp = lastButton.Content;
+                        lastButton.Content = button.Content;
+                        button.Content = tmp;
+                    }
+                    
                     lastClickedButton = "";
 
+                    //oddanie tury drugiemu graczu
+                    whiteTurn = !whiteTurn;
                 }
             //}
+        }
+
+        private bool canIMoveHere(Button buttonStart, Button lastButton, bool whiteTurn)
+        {
+
+            //trzeba dodać aby sprawdzało czy może się tak ruszyć i poszczególne ruchy
+            throw new NotImplementedException();
+        }
+
+        private bool checkIfCanBeClicked(Button button, bool whiteTurn)
+        {
+            bool canClickIt = false;
+            try
+            {
+                if (button.ContentStringFormat != string.Empty)
+                {
+                    string s1 = "" + button.Content;
+                    if (whiteTurn && s1.Contains("White")) //sprawdź czy to tura białego i czy klika biały pionek
+                    {
+
+                        canClickIt = true;
+                        MessageBox.Show("" + button.Content+" jest ok");
+                    }
+                    else if (!whiteTurn && s1.Contains("Black"))
+                    {
+
+                         canClickIt = true;
+                         MessageBox.Show("" + button.Content + " jest ok");
+                    }
+                }
+            } catch (Exception)
+            {
+                MessageBox.Show("Błąd w sprawdzeniu przycisku");
+            }
+            return canClickIt;
         }
     }
 }
